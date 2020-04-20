@@ -1,11 +1,10 @@
-// コンパイルからテストまで全部やってくれる
-// 第一引数にコンパイルファイルの名前を指定
-// input.txtの書き換え忘れに注意
-// このファイルをコンパイルするときは"g++ aoj-tools.cpp -o aoj-tools"でやること
-// unix系osのみ対応
+// コンパイルからテストまでやってくれます
+// input*.txtやoutput*.txtの書き忘れに注意
+// このファイルをコンパイルするときは"g++ aoj-tools.cpp -o aoj-tools"でやることをお勧めします
 
 #include <bits/stdc++.h>
 #include <unistd.h>
+#include <chrono>
 using namespace std;
 
 inline bool check_fsize_is_zero(const string fname, const string message){
@@ -50,10 +49,9 @@ inline void print_all(const string input, const string output, const string exre
 }
 
 inline void test(){
-    const string ac = "\x1b[32mAccepted\x1b[0m";
     const string wa = "\x1b[31mWrong Answer\x1b[0m";
     const string main = "main.cpp";
-    const string exresult = ".exresult.txt"; // これを作成する代わりにpopenを使ってみるのもいいかもしれない
+    const string exresult = ".exresult.txt";
     const string com1 = "g++ " + main;
     const string com3 = "rm " + exresult;
     const string num[] = {"1", "2", "3", "4", "5"};
@@ -86,6 +84,7 @@ inline void test(){
 
             com2 = "./a.out <" + input + "> " + exresult;
             system(com2.c_str());
+
             if(check_file_ex(exresult, "\x1b[31mCan not open "+exresult+".\x1b[0m"))
                 fpexresult = fopen(exresult.c_str(), "r");
             else exit(EXIT_FAILURE);
@@ -105,7 +104,7 @@ inline void test(){
             fclose(fpoutput); fclose(fpexresult);
             if(flag) {
                 if(co == EOF && ce == EOF) {
-                    cout << ac << endl;
+                    cout << "\x1b[32mAccepted\x1b[0m" << endl;
                 } else if(co == EOF && pre_co != '\n') {
                     cout << "\x1b[31m" << output << " format error\x1b[0m" << endl;
                     print_all(input, output, exresult);
